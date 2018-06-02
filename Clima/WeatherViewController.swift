@@ -2,28 +2,25 @@
 //  ViewController.swift
 //  WeatherApp
 //
-//  Created by Angela Yu on 23/08/2015.
-//  Copyright (c) 2015 London App Brewery. All rights reserved.
+//  Created by Narahari Battala on 03/28/2018.
 //
 
 import UIKit
 import CoreLocation
 import Alamofire
 import SwiftyJSON
-
+/*
+     This class contains methods for getting the weather data , parsing the data and displaying the results on user
+     Interface
+ */
 class WeatherViewController: UIViewController , CLLocationManagerDelegate , ChangeCityDelegate{
     
-    //Constants
     let WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
     let APP_ID = "e72ca729af228beabd5d20e3b7749713"
-    
-
-    //TODO: Declare instance variables here
     
     let locationManager = CLLocationManager()
     let weatherDataModel = WeatherDataModel()
     
-    //Pre-linked IBOutlets
     @IBOutlet weak var weatherIcon: UIImageView!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var temperatureLabel: UILabel!
@@ -31,9 +28,6 @@ class WeatherViewController: UIViewController , CLLocationManagerDelegate , Chan
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        //TODO:Set up the location manager here.
     
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
@@ -44,10 +38,7 @@ class WeatherViewController: UIViewController , CLLocationManagerDelegate , Chan
     
     
     
-    //MARK: - Networking
-    /***************************************************************/
-    
-    //Write the getWeatherData method here:
+    // This Method gets the weather data using the location details
     
     func getWeatherData(appUrl:String,parameters:[String:String]) {
         
@@ -93,17 +84,8 @@ class WeatherViewController: UIViewController , CLLocationManagerDelegate , Chan
         }
         
     }
-    //Write the updateWeatherData method here:
     
-
-    
-    
-    
-    //MARK: - UI Updates
-    /***************************************************************/
-    
-    
-    //Write the updateUIWithWeatherData method here:
+    //This methods is for UI Updates
     
     func updateUIWithWeatherData() {
         
@@ -114,13 +96,7 @@ class WeatherViewController: UIViewController , CLLocationManagerDelegate , Chan
     }
     
     
-    
-    
-    //MARK: - Location Manager Delegate Methods
-    /***************************************************************/
-    
-    
-    //Write the didUpdateLocations method here:
+    //This methods gets the current location details
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
@@ -132,9 +108,6 @@ class WeatherViewController: UIViewController , CLLocationManagerDelegate , Chan
          let latitude = String(location.coordinate.latitude)
          let longitude = String(location.coordinate.longitude)
         
-        print(latitude)
-        print(longitude)
-        
         let details : [String : String] = ["lat" : latitude , "lon" : longitude , "appid" : APP_ID]
         
         getWeatherData (appUrl : WEATHER_URL, parameters: details)
@@ -143,29 +116,26 @@ class WeatherViewController: UIViewController , CLLocationManagerDelegate , Chan
     }
     
     
-    //Write the didFailWithError method here:
+    //This methods executes when location is unavailable
     
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-    
-        print(error)
+        
         cityLabel.text = "Location Unavailable"
     }
 
     
-    //MARK: - Change City Delegate methods
-    /***************************************************************/
+    //This methods is used to get the weather data based on city name
+    
     func cityNameEntered(city: String) {
         
         let params : [String:String] = ["q":city,"appid":APP_ID]
         getWeatherData(appUrl: WEATHER_URL, parameters: params)
     }
     
-    //Write the userEnteredANewCityName Delegate method here:
-    
 
     
-    //Write the PrepareForSegue Method here
+   // This method sets the delegate of ChangeCityDelegate protocal to current class
     
    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
